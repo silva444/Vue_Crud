@@ -48,7 +48,12 @@
           <th scope="row">{{ user.id }}</th>
           <td>{{ user.name }}</td>
           <td>{{ user.email }}</td>
-          <td><b-button variant="outline-primary">Editar</b-button></td>
+          <td>
+          <router-link :to="{name:'edit',params:{id:user.id } }">
+          <b-button variant="outline-primary">Editar</b-button>
+          </router-link> 
+          
+          </td>
         </tr>
       </tbody>
     </table>
@@ -70,28 +75,32 @@ export default {
     add_usuario(){
 
         let data = {name:this.name, email:this.email}
-        // this.$http.post('adicionar',data).then(response =>{
-        //         console.log(response);
-        // });
-      this.Listagem.push({name:this.name, email:this.email})
-      this.name =''
-      this.email =''
+         axios.post('http://127.0.0.1:8000/api/adicionar',data).then(response =>{
+                 console.log(response);
+                  this.getlistagem();
+        });
+
+      
     },
     getlistagem(){
         axios.get('http://127.0.0.1:8000/api/lista').then(Response =>{
             console.log(Response.data)
-            //this.Listagem=(Response.data);
+            this.Listagem=(Response.data);
+            this.name =""
+            this.email=""
         })
 
     },
+    refreshPage() {
+    location.reload();
+  },
     add_listagem() {},
   },
   created() {
-    let list = [{ name: "vinicus", email: "vinicus3382@gmail.com", id: 1 }];
-    this.Listagem = list;
+   
     this.getlistagem();
-
   },
+  
 };
 </script>
 
